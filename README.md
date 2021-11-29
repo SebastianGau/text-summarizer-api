@@ -27,11 +27,10 @@ Advantages:
 
 We will deploy the API using **Docker**. Google describes Docker as follows:
 
-```
-Docker is an open source containerization platform. It enables developers to package applications into containers—standardized executable components combining application source code with the operating system (OS) libraries and dependencies required to run that code in any environment.
-```
 
-In other words, Docker is a virtualization technology that allows us to execute computer programs, in this case our API, with all depencies shipped within a single container (and file). The only runtime dependency of a container is an OCI compliant container runtime, which relies mostly on standard features in the Linux kernel. The following picture demonstrates the relation between a virtual machine and a container image:
+*Docker is an open source containerization platform. It enables developers to package applications into containers—standardized executable components combining application source code with the operating system (OS) libraries and dependencies required to run that code in any environment.*
+
+In other words, Docker is a virtualization technology that allows us to execute computer programs, in this case our API, with all dependencies shipped within a single container (and file). The only runtime dependency of a container is an OCI compliant container runtime, which relies on standard features existent in the Linux kernel. The following picture demonstrates the relation between a virtual machine and a container image:
 
 ![alt text](docker-vm-container.png)
 
@@ -64,6 +63,7 @@ Based on the dockerfile we can execute the following bash commands:
 # at first, we log in to docker hub
 docker login -u sebastiangau -p xxx
 # with this command, we build the image locally on our development machine and give it a name
+# this is done by our dockerfile (we tell docker to look for the dockerfile with the dot '.' here)
 docker build . -t text-summarizer-api
 # we now 'tag' the container image so that docker knows where to upload our baked image - in this case into my personal repository in docker hub
 docker tag text-summarizer-api sebastiangau/text-summarizer-api:v1
@@ -72,12 +72,19 @@ docker push sebastiangau/text-summarizer-api:v1
 ```
 
 **IMPORTANT: If you want to try this out you need to create your own docker hub account!** 
-Now our container image is ready to be executed in the cloud!
+Now our container image is ready to be executed in the cloud.
 
 
 ### Deploying the Container Image
 
-We will deploy the API into (Azure) cloud using Azure Kubernetes Service.
+We will deploy the API into (Azure) cloud using Azure Kubernetes Service. Wikipedia describes kubernetes as follows:
+
+*Kubernetes is an open-source container-orchestration system for automating computer application deployment, scaling, and management. It was originally designed by Google and is now maintained by the Cloud Native Computing Foundation. It aims to provide a "platform for automating deployment, scaling, and operations of container workloads". It works with a variety of container runtimes such as Docker, Containerd, and CRI-O. Kubernetes originally interfaced exclusively with the Docker runtime[8] through a "Dockershim"; however, the shim has since been deprecated in favor of directly interfacing with the container through containerd, or replacing Docker with a runtime that is compliant with the Container Runtime Interface (CRI) introduced by Kubernetes in 2016. Many cloud services offer a Kubernetes-based platform or infrastructure as a service (PaaS or IaaS) on which Kubernetes can be deployed as a platform-providing service. Many vendors also provide their own branded Kubernetes distributions.*
+
+The following picture shows the basic kubernetes architecture:
+![](kubernetes.png)
+
+We will now fire commands to the kubernetes API server using their kubernetes command line client, called *kubectl*: 
 
 ```bash
 kubectl create namespace text-summarizer-api-namespace
