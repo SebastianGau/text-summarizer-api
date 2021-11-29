@@ -1,0 +1,20 @@
+{
+  "exclude": [
+    ".mypy_cache",
+    ".pytest_cache",
+    ".vscode",
+    "docs/",
+    "packages",
+    "**/node_modules",
+    "**/__pycache__"
+  ],
+  "ignore": [],
+  "include": ["verbundapi/**/*", "analytics-worker/**/*"],
+  "pythonPlatform": "Windows",
+  "pythonVersion": "3.7",
+  "reportMissingImports": false,
+  "reportMissingTypeStubs": false,
+  "reportTypeshedErrors": false,
+  "reportUntypedClassDecorator": "warning",
+  "reportUntypedFunctionDecorator": "warning"
+}
