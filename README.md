@@ -190,7 +190,7 @@ The API can also be used to download text from an external URL and summarize it.
 *Challenge 2: Invoke the API using PowerShell to summarize Kafkas 'Metamorphosis'!* (This has to do with understanding the logic of the language processing library, so if you are only interested in coding, leave it away).
 
 <details>
-  <summary>Solution to Challenge 3</summary>
+  <summary>Solution to Challenge 2</summary>
 
 ```powershell
 $body = @{url='https://www.gutenberg.org/cache/epub/5200/pg5200.txt';language='english';sentencecount=3}
