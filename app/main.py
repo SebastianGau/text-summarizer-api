@@ -10,9 +10,6 @@ from fastapi import FastAPI
 import uvicorn
 from pydantic import BaseModel
 
-# Modeling
-import os
-
 # sumy
 from sumy.parsers.html import HtmlParser
 from sumy.parsers.plaintext import PlaintextParser
@@ -23,8 +20,8 @@ from sumy.utils import get_stop_words
 import nltk
 nltk.download('punkt')
 
+# intialize REST API using the FastAPI framework
 app = FastAPI()
-
 
 # Initialize logging
 my_logger = logging.getLogger()
@@ -65,7 +62,6 @@ def invoke(request: SummarizeTextRequest) -> SummarizeTextResponse:
         parser = HtmlParser.from_url(request.url, Tokenizer(request.language))
     else:
         raise ValueError('please specify text or url parameter in the request')
-    
 
     for sentence in summarizer(parser.document, request.sentencecount):
         print(sentence)
