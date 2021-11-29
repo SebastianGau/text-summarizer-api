@@ -173,25 +173,29 @@ The API can also be used to download text from an external URL and summarize it.
 <details>
   <summary>Solution to Challenge 1</summary>
   Use the WebUI as shown in the embedded gif, but put in the following request body:
-  ```json
-  {
-  "text": "",
-  "url": "https://www.gutenberg.org/cache/epub/5200/pg5200.txt",
-  "language": "english",
-  "sentencecount": 10
-  }
-  ```
+
+```json
+{
+"text": "",
+"url": "https://www.gutenberg.org/cache/epub/5200/pg5200.txt",
+"language": "english",
+"sentencecount": 10
+}
+```
+
 </details>
 
 *Challenge 2: Invoke the API using PowerShell to summarize Kafkas 'Metamorphosis'!*
 
 <details>
   <summary>Solution to Challenge 2</summary>
-  ```powershell
-  $body = @{url='https://www.gutenberg.org/cache/epub/5200/pg5200.txt';language='english';sentencecount=3}
-  $response = Invoke-WebRequest -Uri http://20.50.224.251/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
-  $response.Content
-  ```
+
+```powershell
+$body = @{url='https://www.gutenberg.org/cache/epub/5200/pg5200.txt';language='english';sentencecount=3}
+$response = Invoke-WebRequest -Uri http://20.50.224.251/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
+$response.Content
+```
+
 </details>
 
 
