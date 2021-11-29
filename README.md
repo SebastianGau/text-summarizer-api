@@ -1,8 +1,30 @@
 # Informatics, Computing, Digital - Seminar for Patent Attorneys
 
+<!-- vscode-markdown-toc -->
+* 1. [The Basics - What is a REST API and why developers use REST APIs](#TheBasics-WhatisaRESTAPIandwhydevelopersuseRESTAPIs)
+* 2. [Deploying the API](#DeployingtheAPI)
+	* 2.1. [Building the Container Image](#BuildingtheContainerImage)
+	* 2.2. [Deploying the Container Image](#DeployingtheContainerImage)
+* 3. [Putting it into Practice](#PuttingitintoPractice)
+	* 3.1. [Example Texts](#ExampleTexts)
+	* 3.2. [Invocation via WebUI](#InvocationviaWebUI)
+	* 3.3. [Invocation of the API via PowerShell on your machine](#InvocationoftheAPIviaPowerShellonyourmachine)
+* 4. [Challenges](#Challenges)
+	* 4.1. [Challenge 1](#Challenge1)
+	* 4.2. [Challenge 2](#Challenge2)
+	* 4.3. [Challenge 3](#Challenge3)
+
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
+
 This repository contains code and tutorial examples to demonstrate patent attorneys which technologies are the back bone of digitalization today. In this seminar, we will develop a REST application programmer interface (API) that is capable of summarizing text, e.g. patent text, to a specified length.
 
-## The Basics - What is a REST API and why developers use REST APIs
+
+
+##  1. <a name='TheBasics-WhatisaRESTAPIandwhydevelopersuseRESTAPIs'></a>The Basics - What is a REST API and why developers use REST APIs
 
 **ToDo by Robert - currently proposal from Sebastian**
 
@@ -23,7 +45,7 @@ Advantages:
 - **Visibility, reliability and scalability**: The separation between client and server has one evident advantage, and that is that each development team can scale the product without too much problem. They can migrate to other servers or make all kinds of changes in the database, provided the data from each request is sent correctly. The separation makes it easier to have the front and the back on different servers, and this makes the apps more flexible to work with.
 - **The REST API is always independent of the type of platform or languages**: The REST API always adapts to the type of syntax or platforms being used, which gives considerable freedom when changing or testing new environments within the development. With a REST API you can have PHP, Java, Python or Node.js servers. The only thing is that it is indispensable that the responses to the requests should always take place in the language used for the information exchange, normally XML or JSON.
 
-## Deploying the API
+##  2. <a name='DeployingtheAPI'></a>Deploying the API
 
 We will deploy the API using **Docker**. Google describes Docker as follows:
 
@@ -35,7 +57,7 @@ In other words, Docker is a virtualization technology that allows us to execute 
 ![alt text](docs/docker-vm-container.png)
 
 
-### Building the Container Image
+###  2.1. <a name='BuildingtheContainerImage'></a>Building the Container Image
 
 Prior to being able to execute the container image containg our code we have to put our code into a container. How this is done is defined by our dockerfile:
 
@@ -75,16 +97,56 @@ docker push sebastiangau/text-summarizer-api:v1
 Now our container image is ready to be executed in the cloud.
 
 
-### Deploying the Container Image
+###  2.2. <a name='DeployingtheContainerImage'></a>Deploying the Container Image
 
 We will deploy the API into (Azure) cloud using Azure Kubernetes Service. Wikipedia describes kubernetes as follows:
 
 *Kubernetes is an open-source container-orchestration system for automating computer application deployment, scaling, and management. It was originally designed by Google and is now maintained by the Cloud Native Computing Foundation. It aims to provide a "platform for automating deployment, scaling, and operations of container workloads". It works with a variety of container runtimes such as Docker, Containerd, and CRI-O. Kubernetes originally interfaced exclusively with the Docker runtime[8] through a "Dockershim"; however, the shim has since been deprecated in favor of directly interfacing with the container through containerd, or replacing Docker with a runtime that is compliant with the Container Runtime Interface (CRI) introduced by Kubernetes in 2016. Many cloud services offer a Kubernetes-based platform or infrastructure as a service (PaaS or IaaS) on which Kubernetes can be deployed as a platform-providing service. Many vendors also provide their own branded Kubernetes distributions.*
 
-The following picture shows the basic kubernetes architecture:
+The following picture shows how kubernetes works from an architectural point of view:
+
 ![](docs/kubernetes.png)
 
-We will now fire commands to the kubernetes API server using their kubernetes command line client, called *kubectl*: 
+We will now fire commands to the kubernetes API server using the kubernetes command line client, called *kubectl*, to instruct kubernetes to execute our API container image. Kubernetes is normally configured in a declarative fashion using so-called 'YAML' files. For our API they look like this:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: text-summarizer-api-deployment
+  labels:
+    app: text-summarizer-api-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: text-summarizer-api-app
+  template:
+    metadata:
+      labels:
+        app: text-summarizer-api-app
+    spec:
+      containers:
+      - name: text-summarizer-api-container
+        image: sebastiangau/text-summarizer-api:v1
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: text-summarizer-api-service
+spec:
+  selector:
+    app: text-summarizer-api-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
+```
+
+Note that the identifer *sebastiangau/text-summarizer-api:v1* we used to push our container to the container registry (Docker Hub) is contained in the YAML manifest. With the following commands we send the manifest to the kubernetes API server:
 
 ```bash
 kubectl create namespace text-summarizer-api-namespace
@@ -132,10 +194,10 @@ Therefore, we can navigate to the following url in our browser [http://20.50.224
  - **Securing the API from malicious Attackers**: Any website or API exposed to the public internet needs to be secured from malicious attackers. We need to take multiple measures ensuring that attackers can under no circumstances misuse our API. There are specialised software stacks ensuring that our API is safe from malicious attackers, e.g. to limit invocation frequency from a certain API consumer. They are e.g. available as cloud services, e.g. the [Azure WAF](https://azure.microsoft.com/de-de/services/web-application-firewall/).
 
 
-## Putting it into Practice
+##  3. <a name='PuttingitintoPractice'></a>Putting it into Practice
 
 
-### Example Texts
+###  3.1. <a name='ExampleTexts'></a>Example Texts
 
 We will invoke the API using the following test text containing 7 sentences, you can copy the text to test it yourself.
 
@@ -146,13 +208,13 @@ Johannes Gutenberg (1398 – 1468) was a German goldsmith and publisher who intr
 We can also invoke the API using the following URL [https://www.gutenberg.org/cache/epub/5200/pg5200.txt](https://www.gutenberg.org/cache/epub/5200/pg5200.txt) containing 'Metamorphosis' by Frank Kafka. The API will then pull the text from this URL, summarize it and return the summarized results to us. You will do some practical stuff later.
 
 
-### Invocation via WebUI
+###  3.2. <a name='InvocationviaWebUI'></a>Invocation via WebUI
 
 The [OpenAPI specification](https://swagger.io/specification/) contains guidelines how REST APIs can be documented in a standard format. In our python code, we use a package that automatically creates the API documentation page based on an automatic analysis of our code. **Question:** Can you find out where in the code this package is referenced?
 
 ![Alt Text](docs/invocation-webui.gif)
 
-### Invocation of the API via PowerShell on your machine
+###  3.3. <a name='InvocationoftheAPIviaPowerShellonyourmachine'></a>Invocation of the API via PowerShell on your machine
 
 You can invoke the API using the following powershell command. To open PowerShell, press the windows key and r at the same time, type in 'powershell' and press enter.
 
@@ -166,11 +228,13 @@ $response.Content
 
 
 
-## Challenges - Invocation for an external URL
+##  4. <a name='Challenges'></a>Challenges
 
 The API can also be used to download text from an external URL and summarize it.
 
-*Challenge 1: Invoke the API using the OpenAPI documentation to summarize Kafkas 'Metamorphosis' (you can find the URL link above)!*
+###  4.1. <a name='Challenge1'></a>Challenge 1
+
+*Invoke the API using the OpenAPI documentation to summarize Kafkas 'Metamorphosis' (you can find the URL link above)!*
 
 <details>
   <summary>Solution to Challenge 1</summary>
@@ -187,7 +251,10 @@ The API can also be used to download text from an external URL and summarize it.
 
 </details>
 
-*Challenge 2: Invoke the API using PowerShell to summarize Kafkas 'Metamorphosis'!* (This has to do with understanding the logic of the language processing library, so if you are only interested in coding, leave it away).
+
+###  4.2. <a name='Challenge2'></a>Challenge 2
+
+*Invoke the API using PowerShell to summarize Kafkas 'Metamorphosis'!* (This has to do with understanding the logic of the language processing library, so if you are only interested in coding, leave it away).
 
 <details>
   <summary>Solution to Challenge 2</summary>
@@ -201,9 +268,9 @@ $response.Content
 </details>
 
 
-</details>
+###  4.3. <a name='Challenge3'></a>Challenge 3
 
-*Challenge 3: Can you explain the output of the following PowerShell command, referring to the inner working principles of the text summarization library we used?*
+*Can you explain the output of the following PowerShell command, referring to the inner working principles of the text summarization library we used?*
 
 ```powershell
 $body = @{text='I like Pizza. I really like Pizza. Pizza is awesome. Pizza is love. Pizza is life. But Doener is OK as well. Life woud be miserable without any of them.';language='english';sentencecount=2}
