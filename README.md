@@ -99,7 +99,7 @@ Now our container image is ready to be executed in the cloud.
 
 ###  2.2. <a name='DeployingtheContainerImage'></a>Deploying the Container Image
 
-We will deploy the API into (Azure) cloud using Azure Kubernetes Service. Wikipedia describes kubernetes as follows:
+We will deploy the API into (Azure) cloud using Azure Kubernetes Service. How this service is set up cannot be explained here, but you can find a tutorial [here](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal). However, Wikipedia describes kubernetes as follows:
 
 *Kubernetes is an open-source container-orchestration system for automating computer application deployment, scaling, and management. It was originally designed by Google and is now maintained by the Cloud Native Computing Foundation. It aims to provide a "platform for automating deployment, scaling, and operations of container workloads". It works with a variety of container runtimes such as Docker, Containerd, and CRI-O. Kubernetes originally interfaced exclusively with the Docker runtime[8] through a "Dockershim"; however, the shim has since been deprecated in favor of directly interfacing with the container through containerd, or replacing Docker with a runtime that is compliant with the Container Runtime Interface (CRI) introduced by Kubernetes in 2016. Many cloud services offer a Kubernetes-based platform or infrastructure as a service (PaaS or IaaS) on which Kubernetes can be deployed as a platform-providing service. Many vendors also provide their own branded Kubernetes distributions.*
 
@@ -107,7 +107,7 @@ The following picture shows how kubernetes works from an architectural point of 
 
 ![](docs/kubernetes.png)
 
-We will now fire commands to the kubernetes API server using the kubernetes command line client, called *kubectl*, to instruct kubernetes to execute our API container image. Kubernetes is normally configured in a declarative fashion using so-called 'YAML' files. For our API they look like this:
+We will now fire commands to the kubernetes API server using the kubernetes command line client, called *kubectl*, to instruct kubernetes to execute our API container image. Kubernetes is normally configured in a declarative fashion using so-called 'YAML' files. For deploying our API they look like this:
 
 ```yaml
 apiVersion: apps/v1
