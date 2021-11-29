@@ -347,7 +347,7 @@ $response.Content
 *Can you explain the output of the following PowerShell command, referring to the inner working principles of the text summarization library we used?* (This has to do with understanding the logic of the language processing library, so if you are only interested in coding, leave it away).
 
 ```powershell
-$body = @{text='I like Pizza. I really like Pizza. Pizza is awesome. Pizza is love. Pizza is life. But Doener is OK as well. Life woud be miserable without any of them.';language='english';sentencecount=2}
+$body = @{text='I like Pizza. I really like Pizza. Pizza is awesome. Pizza is love. Pizza is life. But Doener is OK as well. Life would be miserable without any of them.';language='english';sentencecount=2}
 $response = Invoke-WebRequest -Uri http://20.50.224.251/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
 $response.Content
 ```
