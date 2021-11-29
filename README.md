@@ -279,7 +279,7 @@ We will invoke the API using the following test text containing 7 sentences, you
 Johannes Gutenberg (1398 – 1468) was a German goldsmith and publisher who introduced printing to Europe. His introduction of mechanical movable type printing to Europe started the Printing Revolution and is widely regarded as the most important event of the modern period. It played a key role in the scientific revolution and laid the basis for the modern knowledge-based economy and the spread of learning to the masses.Gutenberg many contributions to printing are: the invention of a process for mass-producing movable type, the use of oil-based ink for printing books, adjustable molds, and the use of a wooden printing press. His truly epochal invention was the combination of these elements into a practical system that allowed the mass production of printed books and was economically viable for printers and readers alike. In Renaissance Europe, the arrival of mechanical movable type printing introduced the era of mass communication which permanently altered the structure of society. The relatively unrestricted circulation of information—including revolutionary ideas—transcended borders, and captured the masses in the Reformation. The sharp increase in literacy broke the monopoly of the literate elite on education and learning and bolstered the emerging middle class.
 ```
 
-We can also invoke the API using the following URL [https://www.gutenberg.org/cache/epub/5200/pg5200.txt](https://www.gutenberg.org/cache/epub/5200/pg5200.txt) containing 'Metamorphosis' by Frank Kafka. The API will then pull the text from this URL, summarize it and return the summarized results to us. You will do some practical stuff later.
+We can also invoke the API resources hosted under external URLs. The API will then pull the text from this URL, summarize it and return the summarized results to us. You will do some practical stuff later with this.
 
 
 ###  4.2. <a name='InvocationviaWebUI'></a>Invocation via WebUI
@@ -308,7 +308,7 @@ The API can also be used to download text from an external URL and summarize it.
 
 ###  5.1. <a name='Challenge1'></a>Challenge 1
 
-*Invoke the API using the OpenAPI documentation to summarize Kafkas 'Metamorphosis' (you can find the URL link above)!*
+*Using the OpenAPI documentation, find out how to invoke the API to summarize Kafkas 'Metamorphosis' that is available under the following URL: [https://www.gutenberg.org/cache/epub/5200/pg5200.txt](https://www.gutenberg.org/cache/epub/5200/pg5200.txt)*
 
 <details>
   <summary>Solution to Challenge 1</summary>
