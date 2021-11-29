@@ -328,7 +328,7 @@ The API can also be used to download text from an external URL and summarize it.
 
 ###  5.2. <a name='Challenge2'></a>Challenge 2
 
-*Invoke the API using PowerShell to summarize Kafkas 'Metamorphosis'!* (This has to do with understanding the logic of the language processing library, so if you are only interested in coding, leave it away).
+*Invoke the API using PowerShell to summarize Kafkas 'Metamorphosis'!* 
 
 <details>
   <summary>Solution to Challenge 2</summary>
@@ -344,7 +344,7 @@ $response.Content
 
 ###  5.3. <a name='Challenge3'></a>Challenge 3
 
-*Can you explain the output of the following PowerShell command, referring to the inner working principles of the text summarization library we used?*
+*Can you explain the output of the following PowerShell command, referring to the inner working principles of the text summarization library we used?* (This has to do with understanding the logic of the language processing library, so if you are only interested in coding, leave it away).
 
 ```powershell
 $body = @{text='I like Pizza. I really like Pizza. Pizza is awesome. Pizza is love. Pizza is life. But Doener is OK as well. Life woud be miserable without any of them.';language='english';sentencecount=2}
