@@ -143,7 +143,7 @@ We will invoke the API using the following test text containing 7 sentences, you
 Johannes Gutenberg (1398 – 1468) was a German goldsmith and publisher who introduced printing to Europe. His introduction of mechanical movable type printing to Europe started the Printing Revolution and is widely regarded as the most important event of the modern period. It played a key role in the scientific revolution and laid the basis for the modern knowledge-based economy and the spread of learning to the masses.Gutenberg many contributions to printing are: the invention of a process for mass-producing movable type, the use of oil-based ink for printing books, adjustable molds, and the use of a wooden printing press. His truly epochal invention was the combination of these elements into a practical system that allowed the mass production of printed books and was economically viable for printers and readers alike. In Renaissance Europe, the arrival of mechanical movable type printing introduced the era of mass communication which permanently altered the structure of society. The relatively unrestricted circulation of information—including revolutionary ideas—transcended borders, and captured the masses in the Reformation. The sharp increase in literacy broke the monopoly of the literate elite on education and learning and bolstered the emerging middle class.
 ```
 
-We can also invoke the API using the following URL [https://www.gutenberg.org/cache/epub/5200/pg5200.txt](https://www.gutenberg.org/cache/epub/5200/pg5200.txt) containing 'Metamorphosis' by Frank Kafka. The API will then pull the text from this URL, summarize it and return the summarized results to us.
+We can also invoke the API using the following URL [https://www.gutenberg.org/cache/epub/5200/pg5200.txt](https://www.gutenberg.org/cache/epub/5200/pg5200.txt) containing 'Metamorphosis' by Frank Kafka. The API will then pull the text from this URL, summarize it and return the summarized results to us. You will do some practical stuff later.
 
 
 ### Invocation via WebUI
@@ -161,6 +161,8 @@ $body = @{text='Johannes Gutenberg (1398 – 1468) was a German goldsmith and pu
 $response = Invoke-WebRequest -Uri http://20.50.224.251/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
 $response.Content
 ```
+
+
 
 
 
@@ -185,10 +187,10 @@ The API can also be used to download text from an external URL and summarize it.
 
 </details>
 
-*Challenge 2: Invoke the API using PowerShell to summarize Kafkas 'Metamorphosis'!*
+*Challenge 2: Invoke the API using PowerShell to summarize Kafkas 'Metamorphosis'!* (This has to do with understanding the logic of the language processing library, so if you are only interested in coding, leave it away).
 
 <details>
-  <summary>Solution to Challenge 2</summary>
+  <summary>Solution to Challenge 3</summary>
 
 ```powershell
 $body = @{url='https://www.gutenberg.org/cache/epub/5200/pg5200.txt';language='english';sentencecount=3}
@@ -199,7 +201,22 @@ $response.Content
 </details>
 
 
+</details>
 
+*Challenge 3: Can you explain the output of the following PowerShell command, referring to the inner working principles of the text summarization library we used?*
+
+```powershell
+$body = @{text='I like Pizza. I really like Pizza. Pizza is awesome. Pizza is love. Pizza is life. But Doener is OK as well. Life woud be miserable without any of them.';language='english';sentencecount=2}
+$response = Invoke-WebRequest -Uri http://20.50.224.251/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
+$response.Content
+```
+
+<details>
+  <summary>Solution to Challenge 3</summary>
+
+  One could expect that the summarized version should contain more sentences containing 'Pizza', but this is not the case. The language processing library obviously counts the number of word occurrences and assigns priorities to the individual sentences, but as soon as the high-priority word 'Pizza' is covered within one of the summarized sentences, the library assigns a higher priority to sentences containing words that occurr in other contexts, which in our case is 'life'.
+
+</details>
 
 
 
