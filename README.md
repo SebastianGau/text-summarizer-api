@@ -134,7 +134,7 @@ In other words, Docker is a virtualization technology that allows us to execute 
 
 ###  3.1. <a name='BuildingtheContainerImage'></a>Building the Container Image
 
-Prior to being able to execute the container image containg our code we have to put our code into a container. How this is done is defined by our dockerfile:
+Prior to being able to execute the container image containig our code we have to put our code into a container. How this is done is defined by the Dockerfile residing in the repository root:
 
 ```dockerfile
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
@@ -145,7 +145,6 @@ WORKDIR /app
 COPY requirements.txt /app
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
-EXPOSE 5000
 
 # Copy contents from your local to your docker container
 COPY ./app /app
@@ -154,7 +153,7 @@ COPY ./app /app
 # CMD ["python","main.py"]
 ```
 
-Based on the dockerfile we can execute the following bash commands:
+Based on the dockerfile we can execute the following bash commands in the repository root:
 
 ```bash
 # at first, we log in to docker hub
@@ -261,7 +260,7 @@ Events:
   Normal  EnsuredLoadBalancer   41s   service-controller  Ensured load balancer
 ```
 
-Therefore, we can navigate to the following url in our browser [http://20.50.224.251/docs](http://20.50.224.251/docs) where will see the documentation of our API according to our  so-called OpenAPI standard.
+Therefore, we can navigate to the following url in our browser [http://20.50.224.251/docs](http://20.50.224.251/docs) where we will see a standardized documentation of our API based on the OpenAPI standard.
 
 **Hint:** To actually use our API in production we would have to ensure many things that we left away here for simplicity:
  - **Encryption and DNS**: Left to the URL, you can see your browser telling you that the website you are calling is 'insecure'. For productive use we need to generate a SSL certificate and bind it in our kubernetes ingress, e.g. by using [Let's Encrypt on Azure Kubernetes Service](https://docs.microsoft.com/de-de/azure/aks/ingress-tls). Additionally, we need a public DNS domain name to ensure our API is reachable by a human-readable name, e.g. under [https://myapi.mydomain.com](https://myapi.mydomain.com) instead of [http://20.50.224.251/docs](http://20.50.224.251/docs).
