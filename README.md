@@ -130,7 +130,7 @@ Therefore, we can navigate to the following url in our browser [http://20.50.224
 
 ### Example Texts
 
-We will invoke the API using the following test text:
+We will invoke the API using the following test text containing 7 sentences, you can copy the text to test it yourself.
 
 ```text
 Johannes Gutenberg (1398 – 1468) was a German goldsmith and publisher who introduced printing to Europe. His introduction of mechanical movable type printing to Europe started the Printing Revolution and is widely regarded as the most important event of the modern period. It played a key role in the scientific revolution and laid the basis for the modern knowledge-based economy and the spread of learning to the masses.Gutenberg many contributions to printing are: the invention of a process for mass-producing movable type, the use of oil-based ink for printing books, adjustable molds, and the use of a wooden printing press. His truly epochal invention was the combination of these elements into a practical system that allowed the mass production of printed books and was economically viable for printers and readers alike. In Renaissance Europe, the arrival of mechanical movable type printing introduced the era of mass communication which permanently altered the structure of society. The relatively unrestricted circulation of information—including revolutionary ideas—transcended borders, and captured the masses in the Reformation. The sharp increase in literacy broke the monopoly of the literate elite on education and learning and bolstered the emerging middle class.
@@ -141,7 +141,9 @@ We can also invoke the API using the following URL [https://www.gutenberg.org/ca
 
 ### Invocation via WebUI
 
-TBD
+The [OpenAPI specification](https://swagger.io/specification/) contains guidelines how REST APIs can be documented in a standard format. In our python code, we use a package that automatically creates the API documentation page based on an automatic analysis of our code. **Question:** Can you find out where in the code this package is referenced?
+
+![Alt Text](invocation-webui.gif)
 
 ### Invocation of the API via PowerShell on your machine
 
