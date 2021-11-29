@@ -4,11 +4,11 @@ This repository contains code and tutorial examples to demonstrate patent attorn
 
 ## The Basics - What is a REST API and why developers use REST APIs
 
-**ToDo by Robert - Currently proposal from Sebastian**
+**ToDo by Robert - currently proposal from Sebastian**
 
 A REST API can be used to exchange data between two computer systems:
 
-![Rest-API.png](Rest-API.png)
+![Rest-API.png](docs/Rest-API.png)
 
 - **Stateless client/server protocol**: Each HTTP contains all the necessary information to run it, which means that neither the client nor the server need to remember any previous state to satisfy it. Be that as it may, some HTTP applications incorporate a cache memory. This configures what is known as the stateless client-cache-server protocol: it is possible to define some of the responses to specific HTTP requests as cachable, so the client can run the same response for identical requests in the future. However, the fact that the option exists doesn't mean it is the most recommended.
 - **Well-defined Operation Set**:There are four very important data transactions in any REST system and HTTP specification: POST (create), GET (read and consult), PUT (edit) and DELETE.
@@ -32,7 +32,7 @@ We will deploy the API using **Docker**. Google describes Docker as follows:
 
 In other words, Docker is a virtualization technology that allows us to execute computer programs, in this case our API, with all dependencies shipped within a single container (and file). The only runtime dependency of a container is an OCI compliant container runtime, which relies on standard features existent in the Linux kernel. The following picture demonstrates the relation between a virtual machine and a container image:
 
-![alt text](docker-vm-container.png)
+![alt text](docs/docker-vm-container.png)
 
 
 ### Building the Container Image
@@ -67,7 +67,7 @@ docker login -u sebastiangau -p xxx
 docker build . -t text-summarizer-api
 # we now 'tag' the container image so that docker knows where to upload our baked image - in this case into my personal repository in docker hub
 docker tag text-summarizer-api sebastiangau/text-summarizer-api:v1
-# we push (=upload) the image from our local development machine to docker hub, this takes some time
+# we push (=upload) the image from our local development computer to docker hub, a centralized storage service for containers. this takes some time
 docker push sebastiangau/text-summarizer-api:v1
 ```
 
@@ -82,7 +82,7 @@ We will deploy the API into (Azure) cloud using Azure Kubernetes Service. Wikipe
 *Kubernetes is an open-source container-orchestration system for automating computer application deployment, scaling, and management. It was originally designed by Google and is now maintained by the Cloud Native Computing Foundation. It aims to provide a "platform for automating deployment, scaling, and operations of container workloads". It works with a variety of container runtimes such as Docker, Containerd, and CRI-O. Kubernetes originally interfaced exclusively with the Docker runtime[8] through a "Dockershim"; however, the shim has since been deprecated in favor of directly interfacing with the container through containerd, or replacing Docker with a runtime that is compliant with the Container Runtime Interface (CRI) introduced by Kubernetes in 2016. Many cloud services offer a Kubernetes-based platform or infrastructure as a service (PaaS or IaaS) on which Kubernetes can be deployed as a platform-providing service. Many vendors also provide their own branded Kubernetes distributions.*
 
 The following picture shows the basic kubernetes architecture:
-![](kubernetes.png)
+![](docs/kubernetes.png)
 
 We will now fire commands to the kubernetes API server using their kubernetes command line client, called *kubectl*: 
 
@@ -150,15 +150,16 @@ We can also invoke the API using the following URL [https://www.gutenberg.org/ca
 
 The [OpenAPI specification](https://swagger.io/specification/) contains guidelines how REST APIs can be documented in a standard format. In our python code, we use a package that automatically creates the API documentation page based on an automatic analysis of our code. **Question:** Can you find out where in the code this package is referenced?
 
-![Alt Text](invocation-webui.gif)
+![Alt Text](docs/invocation-webui.gif)
 
 ### Invocation of the API via PowerShell on your machine
 
-(THIS IS NOT YET WORKING) You can invoke the API using the following powershell command. 
+(THIS IS NOT YET WORKING) You can invoke the API using the following powershell command. To open PowerShell, press the windows key and r at the same time, type in 'powershell' and press enter.
 
 ```powershell
-$postParams = @{text='Johannes Gutenberg (1398 – 1468) was a German goldsmith and publisher who introduced printing to Europe. His introduction of mechanical movable type printing to Europe started the Printing Revolution and is widely regarded as the most important event of the modern period. It played a key role in the scientific revolution and laid the basis for the modern knowledge-based economy and the spread of learning to the masses.Gutenberg many contributions to printing are: the invention of a process for mass-producing movable type, the use of oil-based ink for printing books, adjustable molds, and the use of a wooden printing press. His truly epochal invention was the combination of these elements into a practical system that allowed the mass production of printed books and was economically viable for printers and readers alike. In Renaissance Europe, the arrival of mechanical movable type printing introduced the era of mass communication which permanently altered the structure of society. The relatively unrestricted circulation of information—including revolutionary ideas—transcended borders, and captured the masses in the Reformation. The sharp increase in literacy broke the monopoly of the literate elite on education and learning and bolstered the emerging middle class.';language='english';sentencecount=6}
-Invoke-WebRequest -Uri http://localhost:5000/summarize -Method POST -Body $postParams
+$body = @{text='Johannes Gutenberg (1398 – 1468) was a German goldsmith and publisher who introduced printing to Europe. His introduction of mechanical movable type printing to Europe started the Printing Revolution and is widely regarded as the most important event of the modern period. It played a key role in the scientific revolution and laid the basis for the modern knowledge-based economy and the spread of learning to the masses.Gutenberg many contributions to printing are: the invention of a process for mass-producing movable type, the use of oil-based ink for printing books, adjustable molds, and the use of a wooden printing press. His truly epochal invention was the combination of these elements into a practical system that allowed the mass production of printed books and was economically viable for printers and readers alike. In Renaissance Europe, the arrival of mechanical movable type printing introduced the era of mass communication which permanently altered the structure of society. The relatively unrestricted circulation of information—including revolutionary ideas—transcended borders, and captured the masses in the Reformation. The sharp increase in literacy broke the monopoly of the literate elite on education and learning and bolstered the emerging middle class.';language='english';sentencecount=3}
+$response = Invoke-WebRequest -Uri http://20.50.224.251/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
+$response.Content
 ```
 
 
