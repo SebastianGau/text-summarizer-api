@@ -28,7 +28,7 @@ Advantages:
 We will deploy the API using **Docker**. Google describes Docker as follows:
 
 
-*Docker is an open source containerization platform. It enables developers to package applications into containers—standardized executable components combining application source code with the operating system (OS) libraries and dependencies required to run that code in any environment.*
+>Docker is an open source containerization platform. It enables developers to package applications into containers—standardized executable components combining application source code with the operating system (OS) libraries and dependencies required to run that code in any environment.
 
 In other words, Docker is a virtualization technology that allows us to execute computer programs, in this case our API, with all dependencies shipped within a single container (and file). The only runtime dependency of a container is an OCI compliant container runtime, which relies on standard features existent in the Linux kernel. The following picture demonstrates the relation between a virtual machine and a container image:
 
@@ -164,9 +164,35 @@ $response.Content
 
 
 
-### Invocation for an external URL
+## Challenges - Invocation for an external URL
 
-TBD
+The API can also be used to download text from an external URL and summarize it.
+
+*Challenge 1: Invoke the API using the OpenAPI documentation to summarize Kafkas 'Metamorphosis' (you can find the URL link above)!*
+
+<details>
+  <summary>Solution to Challenge 1</summary>
+  Use the WebUI as shown in the embedded gif, but put in the following request body:
+  ```json
+  {
+  "text": "",
+  "url": "https://www.gutenberg.org/cache/epub/5200/pg5200.txt",
+  "language": "english",
+  "sentencecount": 10
+  }
+  ```
+</details>
+
+*Challenge 2: Invoke the API using PowerShell to summarize Kafkas 'Metamorphosis'!*
+
+<details>
+  <summary>Solution to Challenge 2</summary>
+  ```powershell
+  $body = @{url='https://www.gutenberg.org/cache/epub/5200/pg5200.txt';language='english';sentencecount=3}
+  $response = Invoke-WebRequest -Uri http://20.50.224.251/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
+  $response.Content
+  ```
+</details>
 
 
 

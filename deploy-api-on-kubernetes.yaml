@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: text-summarizer-api-container
-        image: sebastiangau/text-summarizer-api:v2
+        image: sebastiangau/text-summarizer-api:v5
         ports:
         - containerPort: 80
 ---

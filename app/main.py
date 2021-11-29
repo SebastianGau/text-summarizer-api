@@ -23,7 +23,6 @@ from sumy.utils import get_stop_words
 import nltk
 nltk.download('punkt')
 
-os.environ["PORT"] = "5000"
 app = FastAPI()
 
 
@@ -63,7 +62,7 @@ def invoke(request: SummarizeTextRequest) -> SummarizeTextResponse:
     if request.text:
         parser = PlaintextParser.from_string(request.text, Tokenizer(request.language))
     elif request.url:
-        parser = HtmlParser.from_url(url, Tokenizer(LANGUAGE))
+        parser = HtmlParser.from_url(request.url, Tokenizer(request.language))
     else:
         raise ValueError('please specify text or url parameter in the request')
     
