@@ -134,7 +134,7 @@ In other words, Docker is a virtualization technology that allows us to execute 
 
 ###  3.1. <a name='BuildingtheContainerImage'></a>Building the Container Image
 
-Prior to being able to execute the container image containig our code we have to put our code into a container. How this is done is defined by the Dockerfile residing in the repository root:
+To host our API based on a container image we have to put our code into a container. How this is done is defined by the Dockerfile residing in the repository root:
 
 ```dockerfile
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.7
