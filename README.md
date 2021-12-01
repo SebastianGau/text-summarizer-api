@@ -205,6 +205,7 @@ spec:
       containers:
       - name: text-summarizer-api-container
         image: sebastiangau/text-summarizer-api:v1
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
 ---
@@ -217,7 +218,7 @@ spec:
     app: text-summarizer-api-app
   ports:
   - protocol: TCP
-    port: 80
+    port: 4999
     targetPort: 80
   type: LoadBalancer
 ```
@@ -242,32 +243,32 @@ Name:                     text-summarizer-api-service
 Namespace:                text-summarizer-api-namespace
 Labels:                   <none>
 Annotations:              <none>
-Selector:                 app=text-summarizer-api
+Selector:                 app=text-summarizer-api-app
 Type:                     LoadBalancer
 IP Family Policy:         SingleStack
 IP Families:              IPv4
-IP:                       10.0.145.229
-IPs:                      10.0.145.229
+IP:                       10.0.202.112
+IPs:                      10.0.202.112
 LoadBalancer Ingress:     20.50.224.251
-Port:                     <unset>  5000/TCP
-TargetPort:               5000/TCP
-NodePort:                 <unset>  30286/TCP
-Endpoints:                <none>
+Port:                     <unset>  4999/TCP
+TargetPort:               80/TCP
+NodePort:                 <unset>  30865/TCP
+Endpoints:                10.244.2.37:80
 Session Affinity:         None
 External Traffic Policy:  Cluster
 Events:
-  Type    Reason                Age   From                Message
-  ----    ------                ----  ----                -------
-  Normal  EnsuringLoadBalancer  57s   service-controller  Ensuring load balancer
-  Normal  EnsuredLoadBalancer   41s   service-controller  Ensured load balancer
+  Type    Reason                Age                  From                Message
+  ----    ------                ----                 ----                -------
+  Normal  EnsuringLoadBalancer  4m25s (x4 over 10h)  service-controller  Ensuring load balancer
+  Normal  EnsuredLoadBalancer   4m10s (x2 over 10h)  service-controller  Ensured load balancer
 ```
 
-Therefore, we can navigate to the following url in our browser [http://20.50.224.251/docs](http://20.50.224.251/docs) where we will see a standardized documentation of our API based on the OpenAPI standard.
+Therefore, we can navigate to the following url in our browser [http://20.50.224.251:4999/docs](http://20.50.224.251:4999/docs) where we will see a standardized documentation of our API based on the OpenAPI standard.
 
 **Hint:** To actually use our API in production we would have to ensure many things that we left away here for simplicity:
- - **Encryption and DNS**: Left to the URL, you can see your browser telling you that the website you are calling is 'insecure'. For productive use we need to generate a SSL certificate and bind it in our kubernetes ingress, e.g. by using [Let's Encrypt on Azure Kubernetes Service](https://docs.microsoft.com/de-de/azure/aks/ingress-tls). Additionally, we need a public DNS domain name to ensure our API is reachable by a human-readable name, e.g. under [https://myapi.mydomain.com](https://myapi.mydomain.com) instead of [http://20.50.224.251/docs](http://20.50.224.251/docs).
+ - **Encryption and DNS**: Left to the URL, you can see your browser telling you that the website you are calling is 'insecure'. For productive use we need to generate a SSL certificate and bind it in our kubernetes ingress, e.g. by using [Let's Encrypt on Azure Kubernetes Service](https://docs.microsoft.com/de-de/azure/aks/ingress-tls). Additionally, we need a public DNS domain name to ensure our API is reachable by a human-readable name, e.g. under [https://myapi.mydomain.com](https://myapi.mydomain.com) instead of [http://20.50.224.251:4999/docs](http://20.50.224.251:4999/docs).
  - **Authentication and Authorization**: You normally do not want any user in the public internet to be able call your API - only authenticated users should be able to do this based on providing secrets. You can to this by coupling your API with [Azure Active Directory](https://azure.microsoft.com/de-de/services/active-directory/) or an external service like [keycloak](https://www.keycloak.org/).
- - **Securing the API from malicious Attackers**: Any website or API exposed to the public internet needs to be secured from malicious attackers. We need to take multiple measures ensuring that attackers can under no circumstances misuse our API. There are specialised software stacks ensuring that our API is safe from malicious attackers, e.g. to limit invocation frequency from a certain API consumer. They are e.g. available as cloud services, e.g. the [Azure WAF](https://azure.microsoft.com/de-de/services/web-application-firewall/).
+ - **Securing the API from malicious Attackers**: Any website or API exposed to the public internet needs to be secured from malicious attackers. We need to take multiple measures ensuring that misuse of our API is impossible. A possible misuse could be that an attacker uses a remote code execution vulnerability to use our API container to start mining of cryptocurrencies. There are specialised software stacks ensuring that our API is safe from these kind of attackes, e.g. to limit invocation frequency from a certain API consumer and detect suspect requests. They are e.g. available as cloud services, e.g. the [Azure WAF](https://azure.microsoft.com/de-de/services/web-application-firewall/).
  - **DevOps and Automation**: The steps of bulding the container image and deploying to a runtime environment are normally automated after pushing changes to the source code repository. This is called [CI/CD](https://en.wikipedia.org/wiki/CI/CD).
 
 
@@ -297,7 +298,7 @@ You can invoke the API using the following powershell command. To open PowerShel
 
 ```powershell
 $body = @{text='Johannes Gutenberg (1398 – 1468) was a German goldsmith and publisher who introduced printing to Europe. His introduction of mechanical movable type printing to Europe started the Printing Revolution and is widely regarded as the most important event of the modern period. It played a key role in the scientific revolution and laid the basis for the modern knowledge-based economy and the spread of learning to the masses.Gutenberg many contributions to printing are: the invention of a process for mass-producing movable type, the use of oil-based ink for printing books, adjustable molds, and the use of a wooden printing press. His truly epochal invention was the combination of these elements into a practical system that allowed the mass production of printed books and was economically viable for printers and readers alike. In Renaissance Europe, the arrival of mechanical movable type printing introduced the era of mass communication which permanently altered the structure of society. The relatively unrestricted circulation of information—including revolutionary ideas—transcended borders, and captured the masses in the Reformation. The sharp increase in literacy broke the monopoly of the literate elite on education and learning and bolstered the emerging middle class.';language='english';sentencecount=3}
-$response = Invoke-WebRequest -Uri http://20.50.224.251/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
+$response = Invoke-WebRequest -Uri http://20.50.224.251:4999/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
 $response.Content
 ```
 
@@ -307,11 +308,11 @@ $response.Content
 
 ##  5. <a name='Challenges'></a>Challenges
 
-The API can also be used to download text from an external URL and summarize it.
+This section contains exercises in ascending difficulty.
 
 ###  5.1. <a name='Challenge1'></a>Challenge 1
 
-*Using the OpenAPI documentation, find out how to invoke the API to summarize Kafkas 'Metamorphosis' that is available under the following URL: [https://www.gutenberg.org/cache/epub/5200/pg5200.txt](https://www.gutenberg.org/cache/epub/5200/pg5200.txt)*
+*The API can also be used to download text from an external URL and summarize it. Using the OpenAPI documentation, find out how to invoke the API to summarize Kafkas 'Metamorphosis' that is available under the following URL: [https://www.gutenberg.org/cache/epub/5200/pg5200.txt](https://www.gutenberg.org/cache/epub/5200/pg5200.txt)*
 
 <details>
   <summary>Solution to Challenge 1</summary>
@@ -338,7 +339,7 @@ The API can also be used to download text from an external URL and summarize it.
 
 ```powershell
 $body = @{url='https://www.gutenberg.org/cache/epub/5200/pg5200.txt';language='english';sentencecount=3}
-$response = Invoke-WebRequest -Uri http://20.50.224.251/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
+$response = Invoke-WebRequest -Uri http://20.50.224.251:4999/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
 $response.Content
 ```
 
@@ -351,8 +352,8 @@ $response.Content
 
 ```powershell
 $body = @{text='I like Pizza. I really like Pizza. Pizza is awesome. Pizza is love. Pizza is life. But Doener is OK as well. Life would be miserable without any of them.';language='english';sentencecount=2}
-$response = Invoke-WebRequest -Uri http://20.50.224.251/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
-$response
+$response = Invoke-WebRequest -Uri http://20.50.224.251:4999/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
+$response.RawContent
 ```
 
 <details>
@@ -364,7 +365,7 @@ $response
 
 ### Challenge 4
 
-The API has features that enable storing and invoking python code. You can register a function with the following interface (interface means the function requires a list as input outputs a list)
+The API has features to store and invoke external python code. You can register a python function with the following interface (interface means the function requires a list as input returns a list)
 
 ```python
 from typing import List
@@ -375,14 +376,6 @@ def invoke(argument_list: List[str]) -> List[str]:
     return [str(intsum)]
 ```
 
-by pasting it in the WebUI in the /registerfunction endpoint. Due to JSON limitations the code needs to be put into one line
-
-```python
-from typing import List\n\ndef invoke(argument_list: List[str]):\n  intsum = int(argument_list[0]) + int(argument_list[1])\n  return [str(intsum)]
-```
-
-writing the code into one line is quite confusing, that why you should stick to using powershell to upload your code.
-
 You can ause the following instructions and PowerShell script to push code to the API:
  1. open Windows PowerShell by pressing the windows key + R at the same time and enter 'powershell'
  2. enter 'cd Desktop' into the console and press enter
@@ -390,12 +383,12 @@ You can ause the following instructions and PowerShell script to push code to th
  4. open the file by entering 'start mycode.txt' into the console and press enter
  5. copy the contents from the example function into the text editor and press Str + s on your keyboard
 
-Use the following powershell script to update the remote code (you can just copy and paste it):
+Use the following PowerShell script to update the remote code (you can just copy and paste it):
 
 ```powershell
 $pythoncode = Get-Content mycode.txt -Raw
 $functionid = 42
-$url = 'localhost:5000'
+$url = '20.50.224.251:4999'
 $body = @{functionid = $functionid; pythoncode = $pythoncode | Out-String}
 $response = Invoke-WebRequest -Uri http://$url/registerfunction -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
 $response.RawContent
@@ -406,9 +399,19 @@ Use the following powershell script to invoke your function:
 ```powershell
 $argumentlist = 1, 2
 $functionid = 42
-$url = 'localhost:5000'
+$url = '20.50.224.251:4999'
 $body = @{functionid = $functionid; arguments = $argumentlist}
 $response = Invoke-WebRequest -Uri http://$url/invokefunction -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
 $response.RawContent
 ```
+
+You can also do the same by pasting the code in the OpenAPI web documentation and invoke the /registerfunction endpoint. Due to JSON limitations the code needs to be put into one line:
+
+```python
+from typing import List\n\ndef invoke(argument_list: List[str]):\n  intsum = int(argument_list[0]) + int(argument_list[1])\n  return [str(intsum)]
+```
+
+writing the code into one line is quite confusing, thats why we use powershell to upload our code.
+
+
 
