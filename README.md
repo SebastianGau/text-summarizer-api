@@ -16,6 +16,7 @@
 	* 5.1. [Challenge 1](#Challenge1)
 	* 5.2. [Challenge 2](#Challenge2)
 	* 5.3. [Challenge 3](#Challenge3)
+	* 5.4. [Challenge 4](#Challenge4)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -363,9 +364,9 @@ $response.RawContent
 
 </details>
 
-### Challenge 4
+### Following Challenges - Prerequisites
 
-The API has features to store and invoke external python code. You can register a python function with the following interface (interface means the function requires a list as input returns a list)
+The following challenges will require you to write python code in a text editor. For this purpose, the API has features to store and invoke external python code. You can register a python function with the following interface (interface means the function requires a list as input returns a list):
 
 ```python
 from typing import List
@@ -377,11 +378,12 @@ def invoke(argument_list: List[str]) -> List[str]:
 ```
 
 You can ause the following instructions and PowerShell script to push code to the API:
- 1. open Windows PowerShell by pressing the windows key + R at the same time and enter 'powershell'
+
+ 1. open Windows PowerShell by pressing the windows key + r at the same time and enter 'powershell'
  2. enter 'cd Desktop' into the console and press enter
  3. create a text file on your by entering 'New-Item mycode.txt' into the console and press enter
  4. open the file by entering 'start mycode.txt' into the console and press enter
- 5. copy the contents from the example function into the text editor and press Str + s on your keyboard
+ 5. copy the contents from the example function into the text editor and press str + s on your keyboard
 
 Use the following PowerShell script to update the remote code (you can just copy and paste it):
 
@@ -412,6 +414,18 @@ from typing import List\n\ndef invoke(argument_list: List[str]):\n  intsum = int
 ```
 
 writing the code into one line is quite confusing, thats why we use powershell to upload our code.
+
+
+### Challenges 4
+
+*Write a python function that accepts an input string and returns only alphanumerical characters contained in the input string!*
+
+<details>
+  <summary>Solution to Challenge 4</summary>
+
+  To be done
+
+</details>
 
 
 
