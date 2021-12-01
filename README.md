@@ -16,7 +16,8 @@
 	* 5.1. [Challenge 1](#Challenge1)
 	* 5.2. [Challenge 2](#Challenge2)
 	* 5.3. [Challenge 3](#Challenge3)
-	* 5.4. [Challenge 4](#Challenge4)
+	* 5.4. [Following Challenges - Prerequisites](#FollowingChallenges-Prerequisites)
+	* 5.5. [Challenge 4](#Challenge4)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -364,7 +365,7 @@ $response.RawContent
 
 </details>
 
-### Following Challenges - Prerequisites
+###  5.4. <a name='FollowingChallenges-Prerequisites'></a>Following Challenges - Prerequisites
 
 The following challenges will require you to write python code in a text editor. For this purpose, the API has features to store and invoke external python code. You can register a python function with the following interface (interface means the function requires a list as input returns a list):
 
@@ -416,7 +417,7 @@ from typing import List\n\ndef invoke(argument_list: List[str]):\n  intsum = int
 writing the code into one line is quite confusing, thats why we use powershell to upload our code.
 
 
-### Challenge 4
+###  5.5. <a name='Challenge4'></a>Challenge 4
 
 *Write a python function that accepts an input string and returns only alphanumerical characters contained in the input string!*
 
