@@ -87,7 +87,7 @@ class RegisterFunctionRequest(BaseModel):
 
 
 def store_function(functionid: int, pythoncode: str):
-    file = open(str(functionid) + ".py", "a")
+    file = open(str(functionid) + ".py", "w")
     file.write(pythoncode)
     file.close()
 
@@ -104,8 +104,8 @@ def remove_function(id: int):
     os.remove(str(id) + ".py")
 
 
-def invoke_function(id: int, arguments: List[str]):
-    function_module = load_function(id)
+def invoke_function(functionid: int, arguments: List[str]):
+    function_module = load_function(functionid)
     result = function_module.invoke(arguments)
     return result
 

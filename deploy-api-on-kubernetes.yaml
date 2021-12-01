@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
       - name: text-summarizer-api-container
-        image: sebastiangau/text-summarizer-api:v5
+        image: sebastiangau/text-summarizer-api:v1
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
 ---
@@ -29,6 +30,6 @@ spec:
     app: text-summarizer-api-app
   ports:
   - protocol: TCP
-    port: 80
+    port: 4999
     targetPort: 80
   type: LoadBalancer

@@ -23,7 +23,7 @@
 	/vscode-markdown-toc-config -->
 <!-- /vscode-markdown-toc -->
 
-This repository contains code and tutorial examples to demonstrate patent attorneys which technologies are the back bone of digitalization today. In this seminar, we will develop a REST application programmer interface (API) that is capable of summarizing text, e.g. patent text, to a specified length.
+This repository contains code and tutorial examples to demonstrate patent attorneys which technologies are the back bone of digitalization today. In this seminar, we will develop a REST application programmer interface (API) that is capable of summarizing text, e.g. patent text, to a specified length. The seminar was specifically designed to be doable with minimum requirements on the client PCs of participants.
 
 
 
@@ -308,7 +308,7 @@ $response.Content
 
 ##  5. <a name='Challenges'></a>Challenges
 
-This section contains exercises in ascending difficulty.
+This section contains exercises in ascending difficulty. To do the challenges, only a Windows 10 PC with PowerShell and a text editor is required, so anyone should be able to participate. 
 
 ###  5.1. <a name='Challenge1'></a>Challenge 1
 
