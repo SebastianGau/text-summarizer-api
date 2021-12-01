@@ -377,7 +377,7 @@ def invoke(argument_list: List[str]) -> List[str]:
     return [str(intsum)]
 ```
 
-You can ause the following instructions and PowerShell script to push code to the API:
+You can use the following instructions and PowerShell script to push code to the API:
 
  1. open Windows PowerShell by pressing the windows key + r at the same time and enter 'powershell'
  2. enter 'cd Desktop' into the console and press enter
@@ -416,7 +416,7 @@ from typing import List\n\ndef invoke(argument_list: List[str]):\n  intsum = int
 writing the code into one line is quite confusing, thats why we use powershell to upload our code.
 
 
-### Challenges 4
+### Challenge 4
 
 *Write a python function that accepts an input string and returns only alphanumerical characters contained in the input string!*
 
