@@ -35,6 +35,8 @@ A REST API can be used to exchange data between two computer systems:
 
 ![Rest-API.png](docs/Rest-API.png)
 
+A REST API is characterized as follows:
+
 - **Stateless client/server protocol**: Each HTTP contains all the necessary information to run it, which means that neither the client nor the server need to remember any previous state to satisfy it. Be that as it may, some HTTP applications incorporate a cache memory. This configures what is known as the stateless client-cache-server protocol: it is possible to define some of the responses to specific HTTP requests as cachable, so the client can run the same response for identical requests in the future. However, the fact that the option exists doesn't mean it is the most recommended.
 - **Well-defined Operation Set**:There are four very important data transactions in any REST system and HTTP specification: POST (create), GET (read and consult), PUT (edit) and DELETE.
 - **URI-oriented**: Objects in REST are always manipulated from the URI. It is the URI and no other element that is the sole identifier of each resource in this REST system. The URI allows us to access the information in order to change or delete it, or for example to share its exact location with third parties.
@@ -42,7 +44,7 @@ A REST API can be used to exchange data between two computer systems:
 Layer system: hierarchical architecture between the components. Each layer has a functionality within the REST system.
 - **Use of hypermedia**: hypermedia is a term coined by Ted Nelson in 1965 and is an extension of the concept of hypertext. This concept, taken to web page development, is what allows the user to browse the set of objects through HTML links. In the case of a REST API, the concept of hypermedia explains the capacity of an app development interface to provide the client and the user with the adequate links to run specific actions on the data.
 
-Advantages:
+From a developer perspective, a REST API has the following advantages:
 
 - **Separation between the client and the server**: the REST protocol totally separates the user interface from the server and the data storage. This has some advantages when making developments. For example, it improves the portability of the interface to other types of platforms, it increases the scalability of the projects, and allows the different components of the developments to be evolved independently.
 - **Visibility, reliability and scalability**: The separation between client and server has one evident advantage, and that is that each development team can scale the product without too much problem. They can migrate to other servers or make all kinds of changes in the database, provided the data from each request is sent correctly. The separation makes it easier to have the front and the back on different servers, and this makes the apps more flexible to work with.
@@ -266,6 +268,7 @@ Therefore, we can navigate to the following url in our browser [http://20.50.224
  - **Encryption and DNS**: Left to the URL, you can see your browser telling you that the website you are calling is 'insecure'. For productive use we need to generate a SSL certificate and bind it in our kubernetes ingress, e.g. by using [Let's Encrypt on Azure Kubernetes Service](https://docs.microsoft.com/de-de/azure/aks/ingress-tls). Additionally, we need a public DNS domain name to ensure our API is reachable by a human-readable name, e.g. under [https://myapi.mydomain.com](https://myapi.mydomain.com) instead of [http://20.50.224.251/docs](http://20.50.224.251/docs).
  - **Authentication and Authorization**: You normally do not want any user in the public internet to be able call your API - only authenticated users should be able to do this based on providing secrets. You can to this by coupling your API with [Azure Active Directory](https://azure.microsoft.com/de-de/services/active-directory/) or an external service like [keycloak](https://www.keycloak.org/).
  - **Securing the API from malicious Attackers**: Any website or API exposed to the public internet needs to be secured from malicious attackers. We need to take multiple measures ensuring that attackers can under no circumstances misuse our API. There are specialised software stacks ensuring that our API is safe from malicious attackers, e.g. to limit invocation frequency from a certain API consumer. They are e.g. available as cloud services, e.g. the [Azure WAF](https://azure.microsoft.com/de-de/services/web-application-firewall/).
+ - **DevOps and Automation**: The steps of bulding the container image and deploying to a runtime environment are normally automated after pushing changes to the source code repository. This is called [CI/CD](https://en.wikipedia.org/wiki/CI/CD).
 
 
 ##  4. <a name='PuttingitintoPractice'></a>Putting it into Practice
@@ -349,15 +352,63 @@ $response.Content
 ```powershell
 $body = @{text='I like Pizza. I really like Pizza. Pizza is awesome. Pizza is love. Pizza is life. But Doener is OK as well. Life would be miserable without any of them.';language='english';sentencecount=2}
 $response = Invoke-WebRequest -Uri http://20.50.224.251/summarize -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
-$response.Content
+$response
 ```
 
 <details>
   <summary>Solution to Challenge 3</summary>
 
-  One could expect that the summarized version should contain more sentences containing 'Pizza', but this is not the case. The language processing library obviously counts the number of word occurrences and assigns priorities to the individual sentences, but as soon as the high-priority word 'Pizza' is covered within one of the summarized sentences, the library assigns a higher priority to sentences containing words that occurr in other contexts, which in our case is 'life'.
+  One could expect that the summarized version should contain more sentences containing 'Pizza', but this is not the case. The language processing library obviously counts the number of word occurrences and assigns priorities to the individual sentences, but as soon as the high-priority word 'Pizza' is covered within one of the summarized sentences, the library assigns a higher priority to sentences containing words that occurr in other contexts in combination with 'Pizza', which in our case is 'life'.
 
 </details>
 
+### Challenge 4
 
+The API has features that enable storing and invoking python code. You can register a function with the following interface (interface means the function requires a list as input outputs a list)
+
+```python
+from typing import List
+
+
+def invoke(argument_list: List[str]) -> List[str]:
+    intsum = int(argument_list[0]) + int(argument_list[1])
+    return [str(intsum)]
+```
+
+by pasting it in the WebUI in the /registerfunction endpoint. Due to JSON limitations the code needs to be put into one line
+
+```python
+from typing import List\n\ndef invoke(argument_list: List[str]):\n  intsum = int(argument_list[0]) + int(argument_list[1])\n  return [str(intsum)]
+```
+
+writing the code into one line is quite confusing, that why you should stick to using powershell to upload your code.
+
+You can ause the following instructions and PowerShell script to push code to the API:
+ 1. open Windows PowerShell by pressing the windows key + R at the same time and enter 'powershell'
+ 2. enter 'cd Desktop' into the console and press enter
+ 3. create a text file on your by entering 'New-Item mycode.txt' into the console and press enter
+ 4. open the file by entering 'start mycode.txt' into the console and press enter
+ 5. copy the contents from the example function into the text editor and press Str + s on your keyboard
+
+Use the following powershell script to update the remote code (you can just copy and paste it):
+
+```powershell
+$pythoncode = Get-Content mycode.txt -Raw
+$functionid = 42
+$url = 'localhost:5000'
+$body = @{functionid = $functionid; pythoncode = $pythoncode | Out-String}
+$response = Invoke-WebRequest -Uri http://$url/registerfunction -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
+$response.RawContent
+```
+
+Use the following powershell script to invoke your function:
+
+```powershell
+$argumentlist = 1, 2
+$functionid = 42
+$url = 'localhost:5000'
+$body = @{functionid = $functionid; arguments = $argumentlist}
+$response = Invoke-WebRequest -Uri http://$url/invokefunction -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
+$response.RawContent
+```
 
