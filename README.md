@@ -398,10 +398,10 @@ function updatecode() {
   $response = Invoke-WebRequest -Uri http://$url/registerfunction -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
   $response.RawContent
 }
-updatecode # afterwards use this command to update code
+# updatecode # afterwards use this command to update code
 ```
 
-Use the following PowerShell function to invoke your piece of code (you can just copy and paste it into the shell and press enter):
+Use the following PowerShell snippet to define a function to invoke your piece of code (you can just copy and paste it into the shell and press enter):
 
 ```powershell
 function invokefunc($argumentlist) {
@@ -412,7 +412,7 @@ function invokefunc($argumentlist) {
 }
 ```
 
-Afterwards, you can run your python code very easily with varying arguments:
+After defining the functions, you can run your python code very easily with varying arguments:
 
 ```powershell
 PS C:\Users\GauSe\Desktop> invokefunc 1,2
