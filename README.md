@@ -60,7 +60,7 @@ The API will be developed using Python - one of the most popular multi-purpose p
 
 ToDO
 
-###  2.2. <a name='AddingLanguagesProcessingLibraries'></a>Adding Languages Processing Libraries
+###  2.2. <a name='AddingLanguagesProcessingLibraries'></a>Adding Language Processing Libraries
 
 We will use [sumy](https://pypi.org/project/sumy/) to do the language processing. To use the library, we first need to add the dependency to the requirements.txt file in the repository root (and restarting our development container if you use one):
 
