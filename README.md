@@ -58,7 +58,7 @@ The API will be developed using Python - one of the most popular multi-purpose p
 
 ###  2.1. <a name='CreatingaRESTAPITemplate'></a>Creating a REST API Template
 
-ToDO
+There are many web frameworks you can use for building REST APIs in Python, one of the most popular one is [FastAPI](https://fastapi.tiangolo.com/), which has a very good documentation. Based on this framework I created simple template you can use to start your own project on this [https://github.com/SebastianGau/text-summarizer-api/tree/rest-api-template](template branch).
 
 ###  2.2. <a name='AddingLanguagesProcessingLibraries'></a>Adding Language Processing Libraries
 
