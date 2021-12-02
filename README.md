@@ -386,7 +386,7 @@ Set-Content mycode.txt $code
 start mycode.txt # opens the text editor and shows your code
 ```
 
-Use the following PowerShell script to define a function to update the remote code (you can just copy and paste it into the shell):
+Use the following PowerShell script to define a function to update the remote code (you can just copy and paste it into the shell and press enter):
 
 ```powershell
 # the following will set the functionid for your current powershell session - do not restart powershell or it will be lost
@@ -400,8 +400,8 @@ function updatecode() {
 }
 updatecode # afterwards use this command to update code
 ```
-**IMPORTANT: When using these functions in practice, we need to ensure that you use non-conflicting IDs to update your python code!**
-Use the following PowerShell function to invoke your piece of code:
+
+Use the following PowerShell function to invoke your piece of code (you can just copy and paste it into the shell and press enter):
 
 ```powershell
 function invokefunc($argumentlist) {
@@ -468,23 +468,23 @@ def invoke(argument_list: List[str]) -> List[str]:
 push your code:
 
 ```powershell
-updatecode 42
+updatecode
 ```
 
 invoke the function:
 
 ```powershell
-invokefunc 42 "no matter the question, the answer is always 42", ""
+invokefunc "no matter the question, the answer is always 42", ""
 ```
 
 which will produce the following output:
 
 ```powershell
-PS C:\Users\GauSe\Desktop> invokefunc 42 "no matter the question, the answer is always 42", ""
+PS C:\Users\GauSe\Desktop> invokefunc "no matter the question, the answer is always 42", ""
 HTTP/1.1 200 OK
 Content-Length: 16
 Content-Type: application/json
-Date: Thu, 02 Dec 2021 11:39:05 GMT
+Date: Thu, 02 Dec 2021 13:18:39 GMT
 Server: uvicorn
 
 {"output":["9"]}
