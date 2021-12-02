@@ -6,6 +6,7 @@ import logging
 from timeit import default_timer as timer
 import os
 import sys
+import importlib
 
 # Server
 from fastapi import FastAPI, HTTPException
@@ -81,11 +82,6 @@ def health() -> HealthResponse:
     return h
 
 
-class RegisterFunctionRequest(BaseModel):
-    pythoncode: str = ""
-    functionid: int = 1
-
-
 def store_function(functionid: int, pythoncode: str):
     file = open(str(functionid) + ".py", "w")
     file.write(pythoncode)
@@ -94,7 +90,9 @@ def store_function(functionid: int, pythoncode: str):
 
 def load_function(functionid: int):
     sys.path.append(os.getcwd())
-    function_module = __import__(str(functionid))
+    modulename = str(functionid)
+    function_module = __import__(modulename)
+    importlib.reload(function_module)
     if (not callable(function_module.invoke)):
         raise ValueError('invoke function is not callable or undefined')
     return function_module
@@ -110,14 +108,28 @@ def invoke_function(functionid: int, arguments: List[str]):
     return result
 
 
-@app.post("/registerfunction")
-def registerfunction(request: RegisterFunctionRequest):
+class RegisterFunctionRequest(BaseModel):
+    pythoncode: str = ""
+    functionid: int = 1
+
+
+class RegisterFunctionResponse(BaseModel):
+    message: str = ""
+    functionid: int = 1
+
+
+@app.post("/registerfunction", response_model=RegisterFunctionResponse)
+def registerfunction(request: RegisterFunctionRequest) -> RegisterFunctionResponse:
+    resp = RegisterFunctionResponse()
+    resp.functionid = request.functionid
     store_function(request.functionid, request.pythoncode)
     try:
         load_function(request.functionid)
     except Exception as error:
         remove_function(request.functionid)
         raise HTTPException(status_code=404, detail=str(error))
+    resp.message = "function code registered successfully"
+    return resp
 
 
 class InvokeFunctionRequest(BaseModel):

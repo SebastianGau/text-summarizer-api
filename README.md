@@ -378,53 +378,117 @@ def invoke(argument_list: List[str]) -> List[str]:
     return [str(intsum)]
 ```
 
-You can use the following instructions and PowerShell script to push code to the API:
-
- 1. open Windows PowerShell by pressing the windows key + r at the same time and enter 'powershell'
- 2. enter 'cd Desktop' into the console and press enter
- 3. create a text file on your by entering 'New-Item mycode.txt' into the console and press enter
- 4. open the file by entering 'start mycode.txt' into the console and press enter
- 5. copy the contents from the example function into the text editor and press str + s on your keyboard
-
-Use the following PowerShell script to update the remote code (you can just copy and paste it):
-
+You can use the following instructions and PowerShell script to push code to the API. Open Windows PowerShell by pressing the windows key + r at the same time and enter 'powershell'. Use the following commands to create a file on your desktop containing your python code (you can just copy and paste them into PowerShell):
 ```powershell
-$pythoncode = Get-Content mycode.txt -Raw
-$functionid = 42
-$url = '20.50.224.251:4999'
-$body = @{functionid = $functionid; pythoncode = $pythoncode | Out-String}
-$response = Invoke-WebRequest -Uri http://$url/registerfunction -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
-$response.RawContent
+cd Desktop
+$code = "from typing import List`r`n`r`n`r`ndef invoke(argument_list: List[str]) -> List[str]:`r`n    intsum = int(argument_list[0]) + int(argument_list[1])`r`n    return [str(intsum)]"
+Set-Content mycode.txt $code
+start mycode.txt # opens the text editor and shows your code
 ```
 
-Use the following powershell script to invoke your function:
+Use the following PowerShell script to define a function to update the remote code (you can just copy and paste it into the shell):
 
 ```powershell
-$argumentlist = 1, 2
-$functionid = 42
-$url = '20.50.224.251:4999'
-$body = @{functionid = $functionid; arguments = $argumentlist}
-$response = Invoke-WebRequest -Uri http://$url/invokefunction -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
-$response.RawContent
+# the following will set the functionid for your current powershell session - do not restart powershell or it will be lost
+$functionid = Get-Date -Format fff
+function updatecode() {
+  $pythoncode = Get-Content mycode.txt -Raw
+  $url = '20.50.224.251:4999'
+  $body = @{functionid = $functionid; pythoncode = $pythoncode | Out-String}
+  $response = Invoke-WebRequest -Uri http://$url/registerfunction -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
+  $response.RawContent
+}
+updatecode # afterwards use this command to update code
+```
+**IMPORTANT: When using these functions in practice, we need to ensure that you use non-conflicting IDs to update your python code!**
+Use the following PowerShell function to invoke your piece of code:
+
+```powershell
+function invokefunc($argumentlist) {
+  $url = '20.50.224.251:4999'
+  $body = @{functionid = $functionid; arguments = $argumentlist}
+  $response = Invoke-WebRequest -Uri http://$url/invokefunction -Method 'Post' -Body ($body|ConvertTo-Json) -ContentType "application/json"
+  $response.RawContent
+}
 ```
 
+Afterwards, you can run your python code very easily with varying arguments:
+
+```powershell
+PS C:\Users\GauSe\Desktop> invokefunc 1,2
+HTTP/1.1 200 OK
+Content-Length: 16
+Content-Type: application/json
+Date: Thu, 02 Dec 2021 11:31:01 GMT
+Server: uvicorn
+
+{"output":["3"]}
+PS C:\Users\GauSe\Desktop> invokefunc 1,3
+HTTP/1.1 200 OK
+Content-Length: 16
+Content-Type: application/json
+Date: Thu, 02 Dec 2021 11:31:01 GMT
+Server: uvicorn
+
+{"output":["4"]}
+```
+
+<details>
+  <summary>Alternative Invocation using OpenAPI Web Documentation</summary>
 You can also do the same by pasting the code in the OpenAPI web documentation and invoke the /registerfunction endpoint. Due to JSON limitations the code needs to be put into one line:
 
 ```python
 from typing import List\n\ndef invoke(argument_list: List[str]):\n  intsum = int(argument_list[0]) + int(argument_list[1])\n  return [str(intsum)]
 ```
 
-writing the code into one line is quite confusing, thats why we use powershell to upload our code.
+Writing the code into one line is quite confusing, thats why we use powershell to upload our code.
+</details>
 
 
 ###  5.5. <a name='Challenge4'></a>Challenge 4
 
-*Write a python function that accepts an input string and returns only alphanumerical characters contained in the input string!*
+When summarizing text, we want to find out the word count before and after summarization to measure how effective summarization was.
+*Write a python function according to the interface definition above that accepts an input string and returns the count of words contained in the sentence!*
 
 <details>
   <summary>Solution to Challenge 4</summary>
 
-  To be done
+Store the following in mycode.txt:
+
+```python
+from typing import List
+
+
+def invoke(argument_list: List[str]) -> List[str]:
+    inputsentence = argument_list[0]
+    count = len(inputsentence.split())
+    return [str(count)]
+```
+
+push your code:
+
+```powershell
+updatecode 42
+```
+
+invoke the function:
+
+```powershell
+invokefunc 42 "no matter the question, the answer is always 42", ""
+```
+
+which will produce the following output:
+
+```powershell
+PS C:\Users\GauSe\Desktop> invokefunc 42 "no matter the question, the answer is always 42", ""
+HTTP/1.1 200 OK
+Content-Length: 16
+Content-Type: application/json
+Date: Thu, 02 Dec 2021 11:39:05 GMT
+Server: uvicorn
+
+{"output":["9"]}
+```
 
 </details>
 
