@@ -28,7 +28,22 @@
 
 This repository contains code and tutorial examples to demonstrate patent attorneys which technologies are the back bone of digitalization today. In this seminar, we will develop a REST application programmer interface (API) that is capable of summarizing text, e.g. patent text, to a specified length. The seminar was specifically designed to be doable with minimum requirements on the client PCs of participants.
 
+## 0. Cloud Native - developing for the cloud
 
+> Cloud native technologies enable loosely coupled systems that are resilient, manageable, and observable.
+> Combined with robust automation, they allow engineers to __make high-impact changes frequently
+> and predictably with minimal toil__.
+
+
+- [cloud native roadmap](https://raw.githubusercontent.com/cncf/trailmap/master/CNCF_TrailMap_latest.png) ([Details](https://landscape.cncf.io/))
+- [Cloud Native Glossary](https://glossary.cncf.io/)
+
+Some parts of the cloud native technology stack we will witness today in action.
+
+- Declarative APIs
+- Containerization
+- Orchestration
+- Immutable Infrastructure
 
 ##  1. <a name='SeminarAgenda'></a>Seminar Agenda
 
