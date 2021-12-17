@@ -31,11 +31,11 @@ This repository contains code and tutorial examples to demonstrate patent attorn
 
 ##  1. <a name='SeminarAgenda'></a>Seminar Agenda
 
- 1. Why developers use REST APIs and how they are developed (30 Minutes)
+ 1. Cloud native Development, why developers use REST APIs and how they are developed (30 Minutes)
  2. Deploying the API and Testing the API (30 Minutes)
  3. Challenges (30 Minutes, Open End)
 
-##  2. <a name='CloudNative-developingforthecloud'></a>1. Cloud Native - developing for the cloud
+##  2. <a name='CloudNative-developingforthecloud'></a>Cloud Native - developing for the cloud
 
 > Cloud native technologies enable loosely coupled systems that are resilient, manageable, and observable.
 > Combined with robust automation, they allow engineers to __make high-impact changes frequently
