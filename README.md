@@ -1,23 +1,24 @@
 # Informatics, Computing, Digital - Seminar for Patent Attorneys
 
 <!-- vscode-markdown-toc -->
-* 1. [The Basics - What is a REST API and why developers use REST APIs](#TheBasics-WhatisaRESTAPIandwhydevelopersuseRESTAPIs)
-* 2. [Developing the API](#DevelopingtheAPI)
-	* 2.1. [Creating a REST API Template](#CreatingaRESTAPITemplate)
-	* 2.2. [Adding Languages Processing Libraries](#AddingLanguagesProcessingLibraries)
-* 3. [Deploying the API](#DeployingtheAPI)
-	* 3.1. [Building the Container Image](#BuildingtheContainerImage)
-	* 3.2. [Deploying the Container Image](#DeployingtheContainerImage)
-* 4. [Putting it into Practice](#PuttingitintoPractice)
-	* 4.1. [Example Texts](#ExampleTexts)
-	* 4.2. [Invocation via WebUI](#InvocationviaWebUI)
-	* 4.3. [Invocation of the API via PowerShell on your machine](#InvocationoftheAPIviaPowerShellonyourmachine)
-* 5. [Challenges](#Challenges)
-	* 5.1. [Challenge 1](#Challenge1)
-	* 5.2. [Challenge 2](#Challenge2)
-	* 5.3. [Challenge 3](#Challenge3)
-	* 5.4. [Following Challenges - Prerequisites](#FollowingChallenges-Prerequisites)
-	* 5.5. [Challenge 4](#Challenge4)
+* 1. [Seminar Agenda](#SeminarAgenda)
+* 2. [The Basics - What is a REST API and why developers use REST APIs](#TheBasics-WhatisaRESTAPIandwhydevelopersuseRESTAPIs)
+* 3. [Developing the API](#DevelopingtheAPI)
+	* 3.1. [Creating a REST API Template](#CreatingaRESTAPITemplate)
+	* 3.2. [Adding Language Processing Libraries](#AddingLanguageProcessingLibraries)
+* 4. [Deploying the API](#DeployingtheAPI)
+	* 4.1. [Building the Container Image](#BuildingtheContainerImage)
+	* 4.2. [Deploying the Container Image](#DeployingtheContainerImage)
+* 5. [Putting it into Practice](#PuttingitintoPractice)
+	* 5.1. [Example Texts](#ExampleTexts)
+	* 5.2. [Invocation via WebUI](#InvocationviaWebUI)
+	* 5.3. [Invocation of the API via PowerShell on your machine](#InvocationoftheAPIviaPowerShellonyourmachine)
+* 6. [Challenges](#Challenges)
+	* 6.1. [Challenge 1](#Challenge1)
+	* 6.2. [Challenge 2](#Challenge2)
+	* 6.3. [Challenge 3](#Challenge3)
+	* 6.4. [Following Challenges - Prerequisites](#FollowingChallenges-Prerequisites)
+	* 6.5. [Challenge 4](#Challenge4)
 
 <!-- vscode-markdown-toc-config
 	numbering=true
@@ -29,7 +30,13 @@ This repository contains code and tutorial examples to demonstrate patent attorn
 
 
 
-##  1. <a name='TheBasics-WhatisaRESTAPIandwhydevelopersuseRESTAPIs'></a>The Basics - What is a REST API and why developers use REST APIs
+##  1. <a name='SeminarAgenda'></a>Seminar Agenda
+
+ 1. Why developers use REST APIs and how they are developed (30 Minutes)
+ 2. Deploying the API and Testing the API (30 Minutes)
+ 3. Challenges (30 Minutes, Open End)
+
+##  2. <a name='TheBasics-WhatisaRESTAPIandwhydevelopersuseRESTAPIs'></a>The Basics - What is a REST API and why developers use REST APIs
 
 **ToDo by Robert - currently proposal from Sebastian**
 
@@ -52,15 +59,15 @@ From a developer perspective, a REST API has the following advantages:
 - **Visibility, reliability and scalability**: The separation between client and server has one evident advantage, and that is that each development team can scale the product without too much problem. They can migrate to other servers or make all kinds of changes in the database, provided the data from each request is sent correctly. The separation makes it easier to have the front and the back on different servers, and this makes the apps more flexible to work with.
 - **The REST API is always independent of the type of platform or languages**: The REST API always adapts to the type of syntax or platforms being used, which gives considerable freedom when changing or testing new environments within the development. With a REST API you can have PHP, Java, Python or Node.js servers. The only thing is that it is indispensable that the responses to the requests should always take place in the language used for the information exchange, normally XML or JSON.
 
-##  2. <a name='DevelopingtheAPI'></a>Developing the API
+##  3. <a name='DevelopingtheAPI'></a>Developing the API
 
 The API will be developed using Python - one of the most popular multi-purpose programming languages.
 
-###  2.1. <a name='CreatingaRESTAPITemplate'></a>Creating a REST API Template
+###  3.1. <a name='CreatingaRESTAPITemplate'></a>Creating a REST API Template
 
 There are many web frameworks you can use for building REST APIs in Python, one of the most popular one is [FastAPI](https://fastapi.tiangolo.com/), which has a very good documentation. Based on this framework I created simple template you can use to start your own project on this [template branch](https://github.com/SebastianGau/text-summarizer-api/tree/rest-api-template).
 
-###  2.2. <a name='AddingLanguagesProcessingLibraries'></a>Adding Language Processing Libraries
+###  3.2. <a name='AddingLanguageProcessingLibraries'></a>Adding Language Processing Libraries
 
 We will use [sumy](https://pypi.org/project/sumy/) to do the language processing. To use the library, we first need to add the dependency to the requirements.txt file in the repository root (and restarting our development container if you use one):
 
@@ -124,7 +131,7 @@ def invoke(request: SummarizeTextRequest) -> SummarizeTextResponse:
 
 This will ensure that the API has a /summarize endpoint accepting a POST request wherein the http body contains our text to summarize.
 
-##  3. <a name='DeployingtheAPI'></a>Deploying the API
+##  4. <a name='DeployingtheAPI'></a>Deploying the API
 
 We will deploy the API using **Docker**. Google describes Docker as follows:
 
@@ -136,7 +143,7 @@ In other words, Docker is a virtualization technology that allows us to execute 
 ![alt text](docs/docker-vm-container.png)
 
 
-###  3.1. <a name='BuildingtheContainerImage'></a>Building the Container Image
+###  4.1. <a name='BuildingtheContainerImage'></a>Building the Container Image
 
 To host our API based on a container image we have to put our code into a container. How this is done is defined by the Dockerfile residing in the repository root:
 
@@ -175,7 +182,7 @@ docker push sebastiangau/text-summarizer-api:v1
 Now our container image is ready to be executed in the cloud.
 
 
-###  3.2. <a name='DeployingtheContainerImage'></a>Deploying the Container Image
+###  4.2. <a name='DeployingtheContainerImage'></a>Deploying the Container Image
 
 We will deploy the API into (Azure) cloud using Azure Kubernetes Service. How this service is set up cannot be explained here, but you can find a tutorial [here](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough-portal). However, Wikipedia describes kubernetes as follows:
 
@@ -274,10 +281,10 @@ Therefore, we can navigate to the following url in our browser [http://20.50.224
  - **DevOps and Automation**: The steps of bulding the container image and deploying to a runtime environment are normally automated after pushing changes to the source code repository. This is called [CI/CD](https://en.wikipedia.org/wiki/CI/CD).
 
 
-##  4. <a name='PuttingitintoPractice'></a>Putting it into Practice
+##  5. <a name='PuttingitintoPractice'></a>Putting it into Practice
 
 
-###  4.1. <a name='ExampleTexts'></a>Example Texts
+###  5.1. <a name='ExampleTexts'></a>Example Texts
 
 We will invoke the API using the following test text containing 7 sentences, you can copy the text to test it yourself.
 
@@ -288,13 +295,13 @@ Johannes Gutenberg (1398 – 1468) was a German goldsmith and publisher who intr
 We can also invoke the API resources hosted under external URLs. The API will then pull the text from this URL, summarize it and return the summarized results to us. You will do some practical stuff later with this.
 
 
-###  4.2. <a name='InvocationviaWebUI'></a>Invocation via WebUI
+###  5.2. <a name='InvocationviaWebUI'></a>Invocation via WebUI
 
 The [OpenAPI specification](https://swagger.io/specification/) contains guidelines how REST APIs can be documented in a standard format. In our python code, we use a package that automatically creates the API documentation page based on an automatic analysis of our code. **Question:** Can you find out where in the code this package is referenced?
 
 ![Alt Text](docs/invocation-webui.gif)
 
-###  4.3. <a name='InvocationoftheAPIviaPowerShellonyourmachine'></a>Invocation of the API via PowerShell on your machine
+###  5.3. <a name='InvocationoftheAPIviaPowerShellonyourmachine'></a>Invocation of the API via PowerShell on your machine
 
 You can invoke the API using the following powershell command. To open PowerShell, press the windows key and r at the same time, type in 'powershell' and press enter.
 
@@ -308,11 +315,11 @@ $response.Content
 
 
 
-##  5. <a name='Challenges'></a>Challenges
+##  6. <a name='Challenges'></a>Challenges
 
 This section contains exercises in ascending difficulty. To do the challenges, only a Windows 10 PC with PowerShell and a text editor is required, so anyone should be able to participate. 
 
-###  5.1. <a name='Challenge1'></a>Challenge 1
+###  6.1. <a name='Challenge1'></a>Challenge 1
 
 *The API can also be used to download text from an external URL and summarize it. Using the OpenAPI documentation, find out how to invoke the API to summarize Kafkas 'Metamorphosis' that is available under the following URL: [https://www.gutenberg.org/cache/epub/5200/pg5200.txt](https://www.gutenberg.org/cache/epub/5200/pg5200.txt)*
 
@@ -332,7 +339,7 @@ This section contains exercises in ascending difficulty. To do the challenges, o
 </details>
 
 
-###  5.2. <a name='Challenge2'></a>Challenge 2
+###  6.2. <a name='Challenge2'></a>Challenge 2
 
 *Invoke the API using PowerShell to summarize Kafkas 'Metamorphosis'!* 
 
@@ -348,7 +355,7 @@ $response.Content
 </details>
 
 
-###  5.3. <a name='Challenge3'></a>Challenge 3
+###  6.3. <a name='Challenge3'></a>Challenge 3
 
 *Can you explain the output of the following PowerShell command, referring to the inner working principles of the text summarization library we used?* (This has to do with understanding the logic of the language processing library, so if you are only interested in coding, leave it away).
 
@@ -365,7 +372,7 @@ $response.RawContent
 
 </details>
 
-###  5.4. <a name='FollowingChallenges-Prerequisites'></a>Following Challenges - Prerequisites
+###  6.4. <a name='FollowingChallenges-Prerequisites'></a>Following Challenges - Prerequisites
 
 The following challenges will require you to write python code in a text editor. For this purpose, the API has features to store and invoke external python code. You can register a python function with the following interface (interface means the function requires a list as input returns a list):
 
@@ -445,7 +452,7 @@ Writing the code into one line is quite confusing, thats why we use powershell t
 </details>
 
 
-###  5.5. <a name='Challenge4'></a>Challenge 4
+###  6.5. <a name='Challenge4'></a>Challenge 4
 
 When summarizing text, we want to find out the word count before and after summarization to measure how effective summarization was.
 *Write a python function according to the interface definition above that accepts an input string and returns the count of words contained in the sentence!*
